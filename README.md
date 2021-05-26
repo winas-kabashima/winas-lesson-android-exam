@@ -10,10 +10,71 @@
 **（３）以下のそれぞれのレイアウトを実現するレイアウトXMLを書いてください。**
 
 ①　横一列に３つのViewを並べるレイアウト。その際、３つのViewの幅(width)の比率が、`3:2:1`になるようにすること。また、それぞれ左右に`10dp`ずつマージンを取り、高さはすべて`100dp`とすること。
+①回答
+```
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="100dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="100dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="100dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"/>
+</LinearLayout>
+```
 
 ②　画面いっぱい（上下左右に`10dp`ずつマージン）にViewを置き、それに重ねる形で、width `100dp`、height `100dp`のViewを縦横中央にそろえたレイアウト。色はそれぞれ変えること。
+②回答
+```
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="#FF0000"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <View
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:background="#00FF00"/>
+    </LinearLayout>
+</FrameLayout>
+```
 
 ③　親ビューの下部に横幅`100%`、高さは可変サイズのTextViewを配置し、その上部にwidth `100dp`、height `100dp`のViewを左右の中央にそろえたレイアウト。
+③回答
+```
+
+```
+
 
 **（４）以下のコードのTODO箇所を埋める形で、ActivityのContentViewの各Viewコンポーネントをプロパティアクセスで参照するコードを、①findViewByIdを使う方法、②ViewBindingを使う方法それぞれで書いてください。
 その際、下記の要件に従うこと。**
@@ -21,15 +82,26 @@
 > - レイアウトファイルの名前は、`main_activity.xml`とする
 
 ```kotlin
-class MainActivity : Activity() {
+class MainActivity : Activity() ViewBindable{
+    override lateinit var binding: ViewBinding
     private val findViewByIdView: View?
-        get() = // TODO: ①findViewByIdからViewを取得
+        get() = findViewById<View>(R.id.view)
+        // TODO: ①findViewByIdからViewを取得
     private val viewBindingView: View?
-        get() = // TODO: ②ViewBindingからViewを取得
+        get() = (binding as? MainActivityBinding)?.view
+        // TODO: ②ViewBindingからViewを取得
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // TODO: ここでContentViewを設定すること。①②それぞれでコードを書くこと
+        // ①
+        setContentView(R.layout.main_activity)
+
+        // ②
+        val binding = MainActivityBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
     }
 }
 interface ViewBindable {
